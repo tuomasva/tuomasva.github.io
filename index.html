@@ -2,111 +2,282 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Title</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Farmacia Test 2024</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .full-viewport-text {
-            width: 100vw;
-            height: 100vh;
-            font-size: 10vw; /* Adjust based on your preference */
+        /* Existing styles */
+        .center-screen {
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .big-input, .btn-group, .submit-btn {
+            width: 100%;
+            margin: 10px 0;
+        }
+        .answer-area {
+            margin-top: 20px;
+        }
+
+        /* New style to add spacing between radio button labels */
+        .btn-group .btn {
+            margin-right: 15px; /* Adjust the right margin to increase spacing */
+            padding:20px
+        }
+
+        /* Removes the margin from the last button to maintain alignment */
+        .btn-group .btn:last-child {
+            margin-right: 0;
+        }
+        .fixed-top {
+            right: 0;
+            left: auto;
+            width: auto;
+            z-index: 1050; /* High z-index to keep it above other content */
+        }
+
+        .answers-container {
+            display: flex; /* Use flexbox to layout children in a row */
+            justify-content: center; /* Center the items horizontally */
+            flex-wrap: wrap; /* Allow items to wrap as needed */
+            gap: 20px; /* Add some space between the items */
+        }
+
+        .answer {
+            width: auto; /* Allow the width to adjust based on content */
+            height: auto; /* Allow the height to adjust based on content */
+            padding: 20px; /* Adjust padding to ensure a square appearance */
+            display: flex; /* Use flexbox for centering content inside the div */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+            min-width: 50px; /* Minimum width to ensure readability */
+            max-width: 150px; /* Maximum width to prevent excessive growth */
+            flex: 0 1 auto; /* Allow flexibility but control growth */
+            font-size: 1.5em; /* Adjust the font size as needed */
+        }
+        .results-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border: 2px solid #ccc; /* Light grey border */
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f7f7f7; /* Light grey background for the container */
+        }
+
+        .correct-summary, .incorrect-details {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            border-radius: 5px; /* Optional: adds rounded corners */
+        }
+
+        .correct-summary {
+            background-color: #e9ffe9; /* Very light green, indicates success */
             text-align: center;
-            background-color: #2E2E2E; /* Soft dark gray background */
-            color: #F5F5DC; /* Light cream text color */
-            cursor: pointer; /* Changes the cursor to indicate the text is clickable */
+            border-right: 2px solid #ccc; /* Grey border for separation */
+        }
+
+        .incorrect-details {
+            background-color: #ffe9e9; /* Very light red, indicates areas for improvement */
+        }
+
+        .incorrect-details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .incorrect-details li {
+            margin-bottom: 10px;
+            background-color: #ffffff; /* White background for contrast */
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ffcccc; /* Light red border for each incorrect detail */
+        }
+
+
+        /* Optional: Responsive adjustment */
+        @media (max-width: 600px) {
+            .results-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .correct-summary {
+                border-right: none;
+                border-bottom: 2px solid #ccc;
+                margin-bottom: 20px;
+            }
+        }
+
+        .last-answer-area {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc; /* Light grey border for visibility */
+            text-align: center;
+            font-size: 1.2em;
         }
 
         body {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            background-color: #f0f2f5; /* A soft, neutral gray that's widely used for its calming qualities */
+            color: #333; /* Darker text for good contrast and readability */
+            font-family: Arial, sans-serif; /* A clean, modern font for easy reading */
+            margin: 0;
+            padding: 20px;
         }
+
+        /* Ensure other elements integrate well with the new background */
+        .answers-container, .last-answer-area, .answer-area {
+            background-color: #fff; /* White background for content areas to stand out */
+            border: 1px solid #ddd; /* Slight border to define the containers against the background */
+            padding: 15px;
+            border-radius: 5px; /* Soften the edges for a modern look */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+            margin-bottom: 20px; /* Spacing between containers */
+        }
+
+
+
 
     </style>
-    <script>
-        function adjustFontSize() {
-            var container = document.querySelector('.full-viewport-text');
-            var baseSize = 10; // Base font size in vw
-
-            if (container) {
-                var containerHeight = container.offsetHeight;
-                var contentHeight = container.scrollHeight;
-
-                // Adjust font size if content is taller than container
-                while (contentHeight > containerHeight && baseSize > 1) {
-                    baseSize -= 0.1; // Decrease font size gradually
-                    container.style.fontSize = baseSize + "vw";
-                    contentHeight = container.scrollHeight;
-                }
-            }
-        }
-
-        // Adjust font size on load and resize
-        window.onload = adjustFontSize;
-        window.onresize = adjustFontSize;
-    </script>
-
-    <script>
-        // Function to load and parse the JSON file
-        function loadJSON(filePath) {
-            fetch(filePath)
-                .then(response => response.json())
-                .then(data => {
-
-                    var current = Number(localStorage.getItem('current-question'));
-                    if (!current) {
-                        current = 0;
-                    }
-
-                    if (current < 1 || current > data.length) {
-                        current = 0;
-                    }
-
-                    console.log(current);
-
-                    // Example: Displaying JSON data in the HTML
-                    document.getElementById('full-viewport-text').innerHTML = data[current].text;
-
-                    localStorage.setItem('current-question', current);
-
-
-                })
-                .catch(error => console.error('Error loading JSON:', error));
-        }
-
-        // Load the JSON file
-        loadJSON('text.json');
-    </script>
-
-    <script>
-        document.addEventListener('click', function(event) {
-            // Get the width of the viewport
-            var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-            // Check if the click was on the left or right side
-            if (event.clientX < width / 2) {
-                var current = Number(localStorage.getItem('current-question'));
-                localStorage.setItem('current-question', current - 1);
-                loadJSON('text.json');
-                // Add your logic for a left-side click here
-            } else {
-                var current = Number(localStorage.getItem('current-question'));
-                localStorage.setItem('current-question', current + 1);
-                loadJSON('text.json');
-            }
-            setTimeout(() => adjustFontSize(), 200);
-        });
-    </script>
-
 </head>
 <body>
-<div class="full-viewport-text" id="full-viewport-text">
+
+<div class="container center-screen">
+    <h2>The Farmacia Test 2024</h2>
+    <input type="number" class="form-control big-input" id="numberInput" min="1" max="500" placeholder="Enter number 1-500">
+
+    <div class="answers-container">
+        <div class="btn btn-secondary answer">A</div>
+        <div class="btn btn-secondary answer">B</div>
+        <div class="btn btn-secondary answer">C</div>
+        <div class="btn btn-secondary answer">D</div>
+    </div>
+
+    <div id="lastAnswerArea" class="last-answer-area"></div>
+
+    <div class="answer-area" id="answerArea"></div>
+
+    <div class="fixed-top text-right p-3">
+        <button class="btn btn-success mb-2" onclick="startNewSession()" title="Start New Session">
+            <i class="fas fa-plus-circle"></i>
+        </button>
+        <br>
+        <button class="btn btn-danger" onclick="stopSession()" title="Stop Session">
+            <i class="fas fa-stop-circle"></i>
+        </button>
+    </div>
+
+
+
 </div>
 
+<script>
+    // Example CSV string
+    const answersCsv = "1,c;2,d;3,a;4,B;5,c;6,B;7,D;8,A;9,D;10,A;11,C;12,C;13,B;14,A;15,D;16,D;17,B;18,a;19,B;20,C;21,D;22,B;23,B;24,C;25,A;26,A;27,C;28,B;29,B;30,C;31,D;32,D;33,B;34,B;35,D;36,C;37,B;38,A;39,D;40,D;41,C;42,D;43,C;44,B;45,A;46,D;47,A;48,C;49,B;50,A;51,C;52,D;53,A;54,C;55,A;56,B;57,D;58,D;59,D;60,C;61,A;62,C;63,A;64,D;65,D;66,a;67,B;68,d;69,D;70,c;71,b;72,D;73,A;74,c;75,C;76,d;77,d;78,B;79,a;80,d;81,C;82,A;83,d;84,B;85,D;86,A;87,C;88,D;89,D;90,D;91,B;92,B;93,A;94,A;95,C;96,D;97,C;98,C;99,B;100,D;101,d;102,d;103,b;104,d;105,d;106,d;107,b;108,d;109,b;110,a;111,d;112,c;113,c;114,b;115,a;116,c;117,c;118,c;119,c;120,c;121,d;122,a;123,d;124,a;125,d;126,d;127,b;128,c;129,d;130,d;131,b;132,b;133,d;134,b;135,a;136,b;137,a;138,d;139,a;140,b;141,b;142,c;143,d;144,a;145,c;146,b;147,c;148,b;149,d;150,b;151,d;152,c;153,c;154,c;155,d;156,a;157,c;158,a;159,c;160,d;161,b;162,b;163,c;164,c;165,b;166,d;167,c;168,a;169,c;170,d;171,b;172,d;173,D;174,C;175,D;176,A;177,D;178,B;179,A;180,C;181,C;182,D;183,A;184,D;185,B;186,C;187,A;188,D;189,D;190,A;191,A;192,A;193,C;194,D;195,A;196,C;197,D;198,B;199,A;200,A;201,B;202,B;203,B;204,B;205,C;206,D;207,A;208,C;209,C;210,D;211,B;212,C;213,A;214,D;215,D;216,B;217,C;218,A;219,A;220,C;221,A;222,D;223,D;224,D;225,A;226,A;227,C;228,D;229,C;230,A;231,B;232,A;233,D;234,C;235,D;236,D;237,B;238,C;239,D;240,D;241,C;242,D;243,D;244,A;245,A;246,A;247,D;248,D;249,C;250,C;251,D;252,A;253,D;254,D;255,A;256,B;257,D;258,C;259,B;260,B;261,C;262,A;263,D;264,B;265,A;266,D;267,D;268,C;269,C;270,D;271,C;272,C;273,D;274,C;275,A;276,D;277,C;278,A;279,D;280,A;281,D;282,C;283,B;284,D;285,B;286,B;287,B;288,A;289,A;290,B;291,C;292,B;293,C;294,C;295,B;296,D;297,A;298,C;299,D;300,1";
+    const answers = parseCsv(answersCsv);
+
+    function parseCsv(csv) {
+        const array = csv.split(';');
+        let result = {};
+        for (let i = 0; i < array.length; i++) {
+            let number = array[i].split(',')[0];
+            let answer = array[i].split(',')[1].toUpperCase();
+            result[number] = answer;
+        }
+        return result;
+    }
+
+    // Initialize session index if it doesn't exist
+    if (!localStorage.getItem('sessionIndex')) {
+        localStorage.setItem('sessionIndex', '1');
+    }
+
+    // Parse and increment session index
+    function incrementSessionIndex() {
+        let sessionIndex = parseInt(localStorage.getItem('sessionIndex'), 10);
+        sessionIndex++;
+        localStorage.setItem('sessionIndex', sessionIndex.toString());
+        return sessionIndex;
+    }
+
+    function startNewSession() {
+        const newIndex = incrementSessionIndex(); // Increment session index for a new session
+        localStorage.setItem(`sessionAnswers${newIndex}`, '{}'); // Initialize new session answers
+        resetSessionUI(); // Reset UI elements for a new session
+    }
+
+    function stopSession() {
+        const sessionIndex = localStorage.getItem('sessionIndex');
+        const sessionAnswers = JSON.parse(localStorage.getItem(`sessionAnswers${sessionIndex}`) || "{}");
+        let correctCount = 0;
+        let totalQuestions = Object.keys(sessionAnswers).length;
+        let incorrectFeedbackHtml = '<ul>';
+
+        for (let [number, answer] of Object.entries(sessionAnswers)) {
+            if (answer.correct !== answer.selected) {
+                incorrectFeedbackHtml += `<li><span class="badge badge-info">#${number}</span> Your answer <span class="badge badge-danger">${answer.selected}</span> (Correct: <span class="badge badge-success">${answer.correct}</span>)</li>`;
+            } else {
+                correctCount++;
+            }
+        }
+        incorrectFeedbackHtml += '</ul>';
+
+        let failurePercentage = ((totalQuestions - correctCount) / totalQuestions) * 100;
+        failurePercentage = failurePercentage.toFixed(2); // Round to two decimal places
+
+
+        // Display summary and details for incorrect answers
+        document.getElementById("answerArea").innerHTML = `
+        <div class="results-container">
+            <div class="correct-summary">
+                <strong>${correctCount}/${totalQuestions} correct</strong><br>
+                <span>Failure Rate: ${failurePercentage}%</span>
+            </div>
+            <div class="incorrect-details">
+                ${incorrectFeedbackHtml}
+            </div>
+        </div>
+    `;
+    }
+
+    function resetSessionUI() {
+        // Resets UI elements to their initial state
+        document.getElementById("numberInput").value = ''; // Clear the number input
+        document.getElementById("answerArea").innerHTML = ''; // Clear the answer display area
+        document.getElementById("lastAnswerArea").innerHTML = ''; // Clear the answer display area
+        // Optionally reset other UI elements here
+    }
+
+    function submitAnswer(letter) {
+        const sessionIndex = localStorage.getItem('sessionIndex');
+        const number = document.getElementById("numberInput").value;
+
+        let sessionAnswers = JSON.parse(localStorage.getItem(`sessionAnswers${sessionIndex}`) || "{}");
+        sessionAnswers[number] = {selected: letter, correct: answers[number]};
+        localStorage.setItem(`sessionAnswers${sessionIndex}`, JSON.stringify(sessionAnswers));
+
+        // Increment number input
+        document.getElementById("numberInput").value = parseInt(number, 10) + 1;
+        document.getElementById("answerArea").innerHTML = ''; // Clear previous feedback
+
+        document.getElementById("lastAnswerArea").innerHTML = `<span class="badge badge-info">#${number}</span> <span class="badge badge-info">${letter}</span>`;
+
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const answerElements = document.querySelectorAll('.answer');
+
+        answerElements.forEach((element) => {
+            element.addEventListener('click', (e) => {
+                submitAnswer(e.target.textContent.trim());
+            });
+        });
+    });
+
+</script>
 </body>
 </html>
